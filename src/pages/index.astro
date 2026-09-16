@@ -1,0 +1,23 @@
+---
+import About from '../components/About.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import Lineup from '../components/Lineup.astro';
+import Tickets from '../components/Tickets.astro';
+import TwoParts from '../components/TwoParts.astro';
+import Venue from '../components/Venue.astro';
+import { event } from '../data/event';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title={`${event.title} | Solo Ravers`} description={`Solo Ravers returns to ${event.city} on ${event.dateLabel}.`}>
+  <main>
+    <Hero title={event.title} date={event.dateLabel} city={event.city} ticketUrl={event.ticketUrl} />
+    <About text={event.description} genre={event.genre} />
+    <TwoParts parts={event.parts} />
+    <Lineup artists={event.lineup} />
+    <Venue address={event.parts[1].address} mapsUrl={event.mapsUrl} />
+    <Tickets ticketUrl={event.ticketUrl} />
+  </main>
+  <Footer promoter={event.promoter} />
+</BaseLayout>

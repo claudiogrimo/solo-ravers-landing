@@ -1,0 +1,32 @@
+---
+interface Props { ticketUrl: string }
+const { ticketUrl } = Astro.props;
+---
+
+<section class="tickets" id="tickets">
+  <p class="section-label">[ 005 / ACCESS ]</p>
+  <div class="ticket-copy">
+    <h2>GET IN.<br /><span>PROPERLY.</span></h2>
+    <p>All access information and tickets live on Resident Advisor. Read the event details before you arrive.</p>
+  </div>
+  <div class="actions">
+    <a class="ticket-action acid" href={ticketUrl} target="_blank" rel="noreferrer"><span>RESIDENT ADVISOR</span><strong>Get tickets</strong><b>↗</b></a>
+  </div>
+</section>
+
+<style>
+  .tickets { display: grid; gap: 2rem; grid-template-columns: .4fr 1.1fr 1fr; margin: 0 auto; max-width: 1320px; padding: clamp(3rem, 8vw, 8rem) 1.25rem; }
+  .section-label { color: var(--acid); font-size: .7rem; font-weight: bold; letter-spacing: .12em; margin: 0; }
+  h2 { font-family: var(--display); font-size: clamp(4rem, 7vw, 7rem); font-weight: 400; letter-spacing: -.04em; line-height: .76; margin: 0 0 1.8rem; text-transform: uppercase; }
+  h2 span { color: var(--red); }
+  .ticket-copy p { color: var(--muted); font-size: 1rem; line-height: 1.2; margin: 0; max-width: 25rem; }
+  .actions { display: flex; flex-direction: column; gap: .8rem; }
+  .ticket-action { align-items: center; color: var(--ink); display: grid; gap: .5rem; grid-template-columns: 1fr auto; min-height: 7.5rem; padding: 1rem; text-decoration: none; }
+  .ticket-action span { font-size: .68rem; font-weight: bold; grid-column: 1; letter-spacing: .1em; }
+  .ticket-action strong { font-family: var(--display); font-size: clamp(2rem, 3vw, 3.2rem); font-weight: 400; grid-column: 1; letter-spacing: -.03em; line-height: .8; text-transform: uppercase; }
+  .ticket-action b { font-size: 2rem; grid-column: 2; grid-row: 1 / span 2; }
+  .acid { background: var(--acid); }
+  .red { background: var(--red); color: var(--paper); }
+  a.ticket-action:hover { outline: 2px solid var(--paper); outline-offset: 3px; }
+  @media (max-width: 760px) { .tickets { grid-template-columns: 1fr; } }
+</style>

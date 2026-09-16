@@ -1,0 +1,40 @@
+export const event = {
+  title: 'The Return of Solo Ravers Invite',
+  dateLabel: 'Wednesday, 21 October 2026',
+  dateIso: '2026-10-21T19:00:00+02:00',
+  city: 'Amsterdam / De Pijp',
+  promoter: 'Solo Ravers',
+  genre: 'Techno',
+  description:
+    "What started four years ago as an ADE WhatsApp group has grown into a global movement. After last year's debut event, we are returning to Amsterdam for round two.",
+  parts: [
+    {
+      number: '01',
+      name: 'Pre-drinks',
+      time: '19:00 - 21:30',
+      venue: 'Tapmarin',
+      address: 'Van Woustraat 130, 1073 LT Amsterdam',
+      ticket: 'Free RA pass',
+      note: 'This pass grants access only to the pre-drinks gathering. It does not grant entry to the main party.',
+      href: 'https://ra.co/events/2521472',
+      action: 'Claim free pass',
+      tone: 'acid',
+    },
+    {
+      number: '02',
+      name: 'Main event',
+      time: '21:30 - late',
+      venue: 'Huis van Iemand Anders',
+      address: 'Van Woustraat 2Hs, Amsterdam',
+      ticket: 'Separate ticket required',
+      note: 'Main-party tickets are sold separately. Tapmarin is just a short walk away.',
+      href: 'https://ra.co/events/2521472',
+      action: 'Get tickets',
+      tone: 'red',
+    },
+  ],
+  lineup: ['Clodol', 'DE//SIRE', 'SLURPiSS', 'DJ contest winner'],
+  mapsUrl:
+    'https://www.google.com/maps/search/?api=1&query=Huis+van+Iemand+Anders+Van+Woustraat+2Hs+Amsterdam',
+  ticketUrl: 'https://ra.co/events/2521472',
+};

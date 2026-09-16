@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  city: string;
+  ticketUrl: string;
+}
+
+const { title, date, city, ticketUrl } = Astro.props;
+---
+
+<header class="hero" id="top">
+  <nav aria-label="Primary navigation">
+    <a class="brand" href="#top">SOLO<br />RAVERS</a>
+    <p>AMSTERDAM<br />2026</p>
+    <a href={ticketUrl} target="_blank" rel="noreferrer">TICKETS ↗</a>
+  </nav>
+
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">ADE / WED 21 OCT / DE PIJP</p>
+      <h1>{title}</h1>
+      <div class="details">
+        <p><strong>{date}</strong><br />19:00 - late</p>
+        <p><strong>{city}</strong><br />Two venues. One long night.</p>
+      </div>
+      <a class="cta cta-acid" href={ticketUrl} target="_blank" rel="noreferrer">Get your ticket <span>↗</span></a>
+    </div>
+    <p class="hero-mark">THE RETURN<br />ROUND TWO<br />AMSTERDAM</p>
+  </div>
+</header>
+
+<style>
+  .hero { min-height: 100svh; padding: 1.25rem; overflow: hidden; position: relative; }
+  .hero::before { background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 3rem 3rem; content: ''; inset: 0; opacity: .2; pointer-events: none; position: absolute; }
+  nav, .hero-grid { position: relative; z-index: 1; }
+  nav { align-items: start; display: flex; font-size: .76rem; font-weight: bold; justify-content: space-between; letter-spacing: .08em; line-height: 1.05; }
+  nav p { margin: 0; text-align: center; }
+  nav a:last-child { color: var(--acid); text-decoration: none; }
+  .brand { color: var(--paper); font-family: var(--display); font-size: 1.15rem; letter-spacing: .02em; text-decoration: none; }
+  .hero-grid { align-items: end; display: grid; grid-template-columns: 1fr auto; gap: clamp(2rem, 7vw, 8rem); margin: clamp(8rem, 25vh, 16rem) auto 0; max-width: 1320px; }
+  .hero-copy { padding-bottom: 1rem; }
+  .hero-mark { align-self: end; color: var(--acid); font-family: var(--display); font-size: clamp(2rem, 4vw, 4.5rem); letter-spacing: -.02em; line-height: .78; margin: 0; text-align: right; }
+  .eyebrow { color: var(--acid); font-size: .78rem; font-weight: bold; letter-spacing: .16em; margin: 0 0 1.4rem; }
+  h1 { font-family: var(--display); font-size: clamp(4.6rem, 10.7vw, 10.5rem); font-stretch: condensed; font-weight: 400; letter-spacing: -.045em; line-height: .8; margin: 0; text-transform: uppercase; }
+  .details { border-top: 1px solid var(--line); display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; margin: 2.8rem 0 1.5rem; max-width: 520px; padding-top: .8rem; }
+  .details p { font-size: .92rem; letter-spacing: .02em; line-height: 1.25; margin: 0; }
+  .details strong { color: var(--acid); }
+  .cta { display: inline-flex; font-size: .85rem; font-weight: bold; gap: 2.5rem; justify-content: space-between; letter-spacing: .08em; padding: .85rem 1rem; text-decoration: none; text-transform: uppercase; }
+  .cta-acid { background: var(--acid); color: var(--ink); }
+  .cta span { font-size: 1.1rem; line-height: .7; }
+  @media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; margin-top: 8rem; } .hero-mark { text-align: left; } h1 { font-size: clamp(4.4rem, 20vw, 7rem); } .details { margin-top: 2rem; } }
+  @media (prefers-reduced-motion: no-preference) { .hero::before { animation: drift 12s linear infinite; } @keyframes drift { to { background-position: 3rem 3rem; } } }
+</style>

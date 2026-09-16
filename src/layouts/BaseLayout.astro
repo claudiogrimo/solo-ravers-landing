@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#11110f" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    --ink: #11110f;
+    --paper: #f1eee4;
+    --muted: #b9b6ad;
+    --acid: #d7ff00;
+    --red: #ff4b2b;
+    --line: rgba(241, 238, 228, 0.3);
+    --display: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    --body: 'Arial Narrow', Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--ink); }
+  body { margin: 0; background: var(--ink); color: var(--paper); font-family: var(--body); }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  ::selection { background: var(--acid); color: var(--ink); }
+</style>

@@ -1,0 +1,19 @@
+---
+interface Props { promoter: string }
+const { promoter } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <p class="mark">SOLO<br />RAVERS</p>
+  <p>THE RETURN OF SOLO RAVERS INVITE<br />AMSTERDAM / 21 OCT 2026</p>
+  <p>BUILT FOR THE NIGHT<br />© {year} {promoter.toUpperCase()}</p>
+</footer>
+
+<style>
+  footer { border-top: 1px solid var(--line); display: grid; gap: 1rem; grid-template-columns: 1fr 1fr 1fr; padding: 1.25rem; }
+  footer p { font-size: .67rem; font-weight: bold; letter-spacing: .1em; line-height: 1.15; margin: 0; }
+  footer p:last-child { text-align: right; }
+  .mark { color: var(--acid); font-family: var(--display); font-size: 1.3rem; letter-spacing: .02em; }
+  @media (max-width: 600px) { footer { grid-template-columns: 1fr; } footer p:last-child { text-align: left; } }
+</style>

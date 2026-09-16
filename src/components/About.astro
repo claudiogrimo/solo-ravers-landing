@@ -1,0 +1,31 @@
+---
+interface Props {
+  text: string;
+  genre: string;
+}
+
+const { text, genre } = Astro.props;
+---
+
+<section class="about" id="about">
+  <p class="section-label">[ 001 / THE INVITE ]</p>
+  <div class="copy">
+    <p class="kicker">A WhatsApp group turned global movement.</p>
+    <p class="story">{text}</p>
+  </div>
+  <aside>
+    <span>GENRE</span>
+    <strong>{genre}</strong>
+  </aside>
+</section>
+
+<style>
+  .about { border-top: 1px solid var(--line); display: grid; gap: 1.25rem; grid-template-columns: .55fr 2fr .55fr; margin: 0 auto; max-width: 1320px; padding: clamp(3rem, 8vw, 8rem) 1.25rem; }
+  .section-label, aside span { color: var(--acid); font-size: .7rem; font-weight: bold; letter-spacing: .12em; margin: 0; }
+  .copy { max-width: 710px; }
+  .kicker { font-size: clamp(1rem, 1.6vw, 1.35rem); font-weight: bold; margin: 0 0 1.3rem; text-transform: uppercase; }
+  .story { font-family: var(--display); font-size: clamp(2.6rem, 5vw, 5.25rem); letter-spacing: -.025em; line-height: .93; margin: 0; text-transform: uppercase; }
+  aside { border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: .75rem; padding-left: 1.25rem; }
+  aside strong { font-family: var(--display); font-size: 2.3rem; font-weight: 400; letter-spacing: .02em; }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 1rem 0 0; } }
+</style>

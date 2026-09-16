@@ -1,0 +1,41 @@
+---
+interface Props {
+  address: string;
+  mapsUrl: string;
+}
+const { address, mapsUrl } = Astro.props;
+---
+
+<section class="venue" id="venue">
+  <div class="venue-copy">
+    <p class="section-label">[ 004 / LOCATION ]</p>
+    <h2>DE PIJP<br /><span>AFTER DARK.</span></h2>
+    <p class="address">HUIS VAN<br />IEMAND ANDERS<br /><small>{address}</small></p>
+    <a href={mapsUrl} target="_blank" rel="noreferrer">Open map ↗</a>
+  </div>
+  <div class="map-panel" aria-label="Location description">
+    <span>52.3530° N<br />4.8978° E</span>
+    <div class="pin">+</div>
+    <p>Two stops.<br />One short walk.<br />No excuses.</p>
+  </div>
+</section>
+
+<style>
+  .venue { background: var(--acid); color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; min-height: 42rem; }
+  .venue-copy, .map-panel { padding: clamp(2rem, 6vw, 6rem); }
+  .venue-copy { display: flex; flex-direction: column; justify-content: space-between; }
+  .section-label { font-size: .7rem; font-weight: bold; letter-spacing: .12em; margin: 0; }
+  h2 { font-family: var(--display); font-size: clamp(4.5rem, 8vw, 8.5rem); font-weight: 400; letter-spacing: -.04em; line-height: .76; margin: 3rem 0; }
+  h2 span { color: var(--red); }
+  .address { font-family: var(--display); font-size: clamp(2rem, 3vw, 3.5rem); letter-spacing: -.02em; line-height: .82; margin: 0; }
+  small { font-family: var(--body); font-size: .78rem; font-weight: bold; letter-spacing: .06em; line-height: 1.1; }
+  .venue-copy a { border-bottom: 2px solid var(--ink); font-size: .8rem; font-weight: bold; letter-spacing: .1em; padding-bottom: .35rem; text-decoration: none; text-transform: uppercase; width: max-content; }
+  .map-panel { background: var(--ink); color: var(--paper); display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+  .map-panel::before, .map-panel::after { border: 1px solid var(--acid); content: ''; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); }
+  .map-panel::before { height: min(34vw, 24rem); width: min(34vw, 24rem); }
+  .map-panel::after { height: min(18vw, 12rem); width: min(18vw, 12rem); }
+  .map-panel span { color: var(--acid); font-size: .75rem; font-weight: bold; letter-spacing: .1em; }
+  .pin { align-items: center; background: var(--red); border-radius: 50%; display: flex; font-family: var(--display); font-size: 5rem; height: 6rem; justify-content: center; left: 50%; line-height: 1; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 6rem; z-index: 1; }
+  .map-panel p { font-family: var(--display); font-size: clamp(1.8rem, 3vw, 3.5rem); line-height: .82; margin: 0; text-transform: uppercase; }
+  @media (max-width: 760px) { .venue { grid-template-columns: 1fr; } .map-panel { min-height: 25rem; } .map-panel::before { height: 16rem; width: 16rem; } .map-panel::after { height: 9rem; width: 9rem; } }
+</style>
