@@ -1,0 +1,33 @@
+---
+interface Props { ticketUrl: string; date: string }
+const { ticketUrl, date } = Astro.props;
+---
+
+<aside class="mobile-ticket-bar" aria-label="Ticket shortcut">
+  <span>21 OCT</span>
+  <a href={ticketUrl} target="_blank" rel="noreferrer">Get tickets <b>↗</b></a>
+  <span>RA</span>
+</aside>
+
+<style>
+  .mobile-ticket-bar { display: none; }
+  @media (max-width: 760px) {
+    .mobile-ticket-bar {
+      align-items: center;
+      background: var(--ink);
+      border-top: 1px solid var(--line);
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      left: 0;
+      padding: .55rem .7rem;
+      position: fixed;
+      right: 0;
+      z-index: 50;
+    }
+    .mobile-ticket-bar span { color: var(--muted); font-size: .62rem; font-weight: bold; letter-spacing: .12em; }
+    .mobile-ticket-bar span:last-of-type { text-align: right; }
+    .mobile-ticket-bar a { background: var(--acid); color: var(--ink); align-items: center; display: flex; font-size: .78rem; font-weight: bold; gap: 1.2rem; letter-spacing: .06em; padding: .7rem 1rem; text-decoration: none; text-transform: uppercase; }
+    .mobile-ticket-bar a b { font-size: 1rem; }
+  }
+</style>

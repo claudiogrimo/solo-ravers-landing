@@ -10,7 +10,7 @@ import { event } from '../data/event';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title={`${event.title} | Solo Ravers`} description={`Solo Ravers returns to ${event.city} on ${event.dateLabel}.`}>
+<BaseLayout title={`${event.title} | Solo Ravers`} description={`Solo Ravers returns to ${event.city} on ${event.dateLabel}.`} ticketUrl={event.ticketUrl} date={event.dateLabel}>
   <main>
     <Hero title={event.title} date={event.dateLabel} city={event.city} ticketUrl={event.ticketUrl} />
     <About text={event.description} genre={event.genre} />
