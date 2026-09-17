@@ -13,7 +13,7 @@ const { title, date, city, ticketUrl } = Astro.props;
   <nav aria-label="Primary navigation">
     <a class="brand" href="#top">SOLO<br />RAVERS</a>
     <p>AMSTERDAM<br />2026</p>
-    <a href={ticketUrl} target="_blank" rel="noreferrer">TICKETS ↗</a>
+    <a href={ticketUrl} target="_blank" rel="noopener noreferrer">TICKETS ↗</a>
   </nav>
 
   <div class="hero-grid">
@@ -24,7 +24,7 @@ const { title, date, city, ticketUrl } = Astro.props;
         <p><strong>{date}</strong><br />19:00 - late</p>
         <p><strong>{city}</strong><br />Two venues. One long night.</p>
       </div>
-      <a class="cta cta-acid" href={ticketUrl} target="_blank" rel="noreferrer">Get your ticket <span>↗</span></a>
+      <a class="cta cta-acid" data-magnet data-magnet-strength="14" href={ticketUrl} target="_blank" rel="noopener noreferrer">Get your ticket <span>↗</span></a>
     </div>
     <p class="hero-mark">THE RETURN<br />ROUND TWO<br />AMSTERDAM</p>
   </div>

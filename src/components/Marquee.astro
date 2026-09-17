@@ -1,0 +1,40 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+const line = items.join(' · ') + ' · ';
+---
+
+<section class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-row marquee-row--acid">
+    <div class="marquee-track" data-marquee-track data-marquee-speed="1">
+      <span>{line}</span><span>{line}</span><span>{line}</span>
+    </div>
+  </div>
+  <div class="marquee-row marquee-row--paper">
+    <div class="marquee-track marquee-track--reverse" data-marquee-track data-marquee-speed="-1">
+      <span>{line}</span><span>{line}</span><span>{line}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee-wrap { overflow: hidden; }
+  .marquee-row { overflow: hidden; padding: .55rem 0; }
+  .marquee-row--acid { background: var(--acid); color: var(--ink); }
+  .marquee-row--paper { background: var(--paper); color: var(--ink); border-top: 1px solid var(--ink); }
+  .marquee-track {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .marquee-track span {
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 2.6vw, 2.6rem);
+    letter-spacing: -.01em;
+    padding-right: .5rem;
+    text-transform: uppercase;
+  }
+</style>

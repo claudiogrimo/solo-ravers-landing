@@ -10,7 +10,7 @@ const { artists } = Astro.props;
   </div>
   <ol>
     {artists.map((artist, index) => (
-      <li><span>{String(index + 1).padStart(2, '0')}</span><strong>{artist}</strong><i>↘</i></li>
+      <li data-stagger-item><span>{String(index + 1).padStart(2, '0')}</span><strong>{artist}</strong><i>↘</i></li>
     ))}
   </ol>
 </section>

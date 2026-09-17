@@ -1,0 +1,153 @@
+---
+// Client-side motion orchestrator for the landing page.
+// Loads GSAP + ScrollTrigger once and wires up: marquee, lineup stagger, magnetic hover.
+//
+// Accessibility: by default the page respects prefers-reduced-motion and stays static.
+// Override: add ?motion=on to the URL to force motion on even when the OS asks for
+// reduced motion (useful for previewing the effects).
+---
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const forced = params.get('motion') === 'on';
+  const systemReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = systemReduce && !forced;
+
+  // ===== If the system asks for reduced motion (and we are not forcing it),
+  // show a tiny, dismissible notice with a link to preview with motion on. =====
+  if (systemReduce && !forced) {
+    const notice = document.createElement('div');
+    notice.className = 'motion-notice';
+    notice.innerHTML =
+      'Motion is off — your system prefers reduced motion. ' +
+      '<a href="?motion=on">Preview with motion →</a>';
+    document.body.appendChild(notice);
+  }
+
+  // ===== MARQUEE (always available; pauses under reduced motion) =====
+  const tracks = document.querySelectorAll<HTMLElement>('[data-marquee-track]');
+
+  const startMarquee = (gsap: any, track: HTMLElement) => {
+    const speed = Number(track.dataset.marqueeSpeed) || 1;
+    const reversed = speed < 0;
+    const duration = reversed ? 46 : 34; // seconds — deliberately slow
+    gsap.fromTo(
+      track,
+      { xPercent: reversed ? -33.333 : 0 },
+      { xPercent: reversed ? 0 : -33.333, duration, ease: 'none', repeat: -1 }
+    );
+  };
+
+  // ===== LINEUP STAGGER =====
+  // The lineup animates every time it enters the viewport (reversible), so the
+  // effect is always observable. Safety rule: the content must never be stuck
+  // hidden — if the trigger cannot be created at all, we reveal it immediately.
+  const setupStagger = (gsap: any, ScrollTrigger: any) => {
+    const items = Array.from(document.querySelectorAll<HTMLElement>('[data-stagger-item]'));
+    if (!items.length) return;
+    const list = (items[0].closest('ol') ?? items[0]) as HTMLElement;
+
+    gsap.set(items, { opacity: 0, y: 34 });
+
+    try {
+      ScrollTrigger.create({
+        trigger: list,
+        start: 'top 78%',
+        end: 'bottom 30%',
+        onEnter: () =>
+          gsap.to(items, {
+            opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+            stagger: 0.12, overwrite: true,
+          }),
+        onEnterBack: () =>
+          gsap.to(items, {
+            opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+            stagger: 0.12, overwrite: true,
+          }),
+        onLeaveBack: () =>
+          gsap.to(items, {
+            opacity: 0, y: 34, duration: 0.4, ease: 'power2.in',
+            stagger: 0.06, overwrite: true,
+          }),
+      });
+
+      // If the list is already on screen at load, reveal it (no animation),
+      // so a tall viewport never strands it hidden. Runs after the trigger
+      // is registered and the layout is measured.
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        const r = list.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.78 && r.bottom > 0) {
+          gsap.set(items, { opacity: 1, y: 0 });
+        }
+      });
+    } catch (err) {
+      // Fallback: never leave the lineup hidden.
+      gsap.set(items, { opacity: 1, y: 0 });
+      console.error('ScrollTrigger setup failed; lineup forced visible.', err);
+    }
+  };
+
+  // ===== MAGNETIC HOVER (desktop / fine pointer only) =====
+  const setupMagnet = (gsap: any) => {
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!fine) return;
+    document.querySelectorAll<HTMLElement>('[data-magnet]').forEach((el) => {
+      const strength = Number(el.dataset.magnetStrength) || 8;
+      const xTo = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
+      const yTo = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
+      el.addEventListener('pointermove', (e: PointerEvent) => {
+        const r = el.getBoundingClientRect();
+        xTo(((e.clientX - r.left - r.width / 2) / r.width) * strength);
+        yTo(((e.clientY - r.top - r.height / 2) / r.height) * strength);
+      });
+      el.addEventListener('pointerleave', () => { xTo(0); yTo(0); });
+    });
+  };
+
+  if (tracks.length || document.querySelector('[data-stagger-item]')) {
+    (async () => {
+      if (reduce) return; // static content, no motion
+
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap ?? gsapMod.default;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger ?? scrollMod.default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      tracks.forEach((t) => startMarquee(gsap, t));
+      setupStagger(gsap, ScrollTrigger);
+      setupMagnet(gsap);
+
+      // Recompute trigger positions once the full layout (fonts, marquee) settles.
+      if (document.readyState === 'complete') {
+        ScrollTrigger.refresh();
+      } else {
+        window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+      }
+    })();
+  }
+</script>
+
+<style is:global>
+  .motion-notice {
+    background: var(--paper);
+    bottom: 0;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: .72rem;
+    font-weight: bold;
+    left: 0;
+    letter-spacing: .04em;
+    padding: .5rem .8rem;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 60;
+  }
+  .motion-notice a { color: var(--ink); text-decoration: underline; }
+  @media (max-width: 760px) {
+    .motion-notice { bottom: 4.4rem; } /* sit above the mobile ticket bar */
+  }
+</style>

@@ -1,0 +1,419 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { event } from '../data/event';
+---
+
+<BaseLayout
+  title="Motion Lab | Solo Ravers"
+  description="Confronto di tecniche di animazione: CSS-only vs JS vanilla vs GSAP."
+  ticketUrl={event.ticketUrl}
+  date={event.dateLabel}
+>
+  <main class="lab">
+    <header class="lab-head">
+      <p class="kicker">[ MOTION LAB / INTERNAL ]</p>
+      <h1>THREE WAYS<br /><span>TO MOVE.</span></h1>
+      <p class="intro">
+        The same three effects, built three ways: pure CSS, tiny vanilla JS, and GSAP.
+        Motion is forced <strong>ON</strong> here regardless of your OS setting, so use the
+        toggle below to switch it off and compare. This page is not linked from the live site.
+      </p>
+      <nav class="jump" aria-label="Jump to demo">
+        <a href="#reveal">01 Reveal</a>
+        <a href="#stagger">02 Stagger</a>
+        <a href="#hover">03 Hover</a>
+        <a href="#marquee">04 Marquee</a>
+        <a href="#compare">05 Compare</a>
+      </nav>
+
+      <div class="controls">
+        <button id="motion-toggle" type="button" class="toggle">Motion: ON</button>
+        <span id="motion-status" class="status">initialising…</span>
+      </div>
+    </header>
+
+    <!-- ============ 01 REVEAL ON SCROLL ============ -->
+    <section id="reveal" class="demo">
+      <p class="demo-label">[ 001 / REVEAL ON SCROLL ]</p>
+      <h2>Reveal</h2>
+      <p class="demo-note">Scroll down. Each card enters from below with a fade.</p>
+
+      <div class="grid3">
+        <article class="cell">
+          <span class="tag tag-css">CSS-only</span>
+          <div class="card reveal-css">animation-timeline: view()</div>
+        </article>
+        <article class="cell">
+          <span class="tag tag-js">JS vanilla</span>
+          <div class="card reveal-js" data-reveal>IntersectionObserver</div>
+        </article>
+        <article class="cell">
+          <span class="tag tag-gsap">GSAP</span>
+          <div class="card reveal-gsap" data-reveal-gsap>ScrollTrigger</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 02 STAGGER ============ -->
+    <section id="stagger" class="demo">
+      <p class="demo-label">[ 002 / STAGGER ]</p>
+      <h2>Stagger</h2>
+      <p class="demo-note">A lineup-style list where each name enters slightly after the previous one.</p>
+
+      <div class="grid3">
+        <article class="cell">
+          <span class="tag tag-css">CSS-only</span>
+          <ul class="lineup stagger-css">
+            <li>Clodol</li><li>DE//SIRE</li><li>SLURPiSS</li><li>DJ contest winner</li>
+          </ul>
+        </article>
+        <article class="cell">
+          <span class="tag tag-js">JS vanilla</span>
+          <ul class="lineup stagger-js" data-stagger>
+            <li>Clodol</li><li>DE//SIRE</li><li>SLURPiSS</li><li>DJ contest winner</li>
+          </ul>
+        </article>
+        <article class="cell">
+          <span class="tag tag-gsap">GSAP</span>
+          <ul class="lineup stagger-gsap" data-stagger-gsap>
+            <li>Clodol</li><li>DE//SIRE</li><li>SLURPiSS</li><li>DJ contest winner</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 03 HOVER ============ -->
+    <section id="hover" class="demo demo-paper">
+      <p class="demo-label">[ 003 / MICRO-INTERACTION ]</p>
+      <h2>Hover</h2>
+      <p class="demo-note">Move your pointer over each button. Same look, three engines.</p>
+
+      <div class="grid3">
+        <article class="cell">
+          <span class="tag tag-css">CSS-only</span>
+          <button class="btn hover-css" type="button">Get tickets ↗</button>
+        </article>
+        <article class="cell">
+          <span class="tag tag-js">JS vanilla</span>
+          <button class="btn hover-js" data-magnet type="button">Get tickets ↗</button>
+        </article>
+        <article class="cell">
+          <span class="tag tag-gsap">GSAP</span>
+          <button class="btn hover-gsap" data-magnet-gsap type="button">Get tickets ↗</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 04 MARQUEE ============ -->
+    <section id="marquee" class="demo">
+      <p class="demo-label">[ 004 / MARQUEE ]</p>
+      <h2>Marquee</h2>
+      <p class="demo-note">A ticker running at three different speeds and directions.</p>
+
+      <div class="tickers">
+        <span class="tag tag-css">CSS-only · 20s</span>
+        <div class="ticker"><div class="track marquee-css">SOLO RAVERS · AMSTERDAM · 21 OCT 2026 ·&nbsp;</div></div>
+
+        <span class="tag tag-js">JS vanilla · 12s</span>
+        <div class="ticker"><div class="track marquee-js" data-marquee>SOLO RAVERS · AMSTERDAM · 21 OCT 2026 ·&nbsp;</div></div>
+
+        <span class="tag tag-gsap">GSAP · 8s (scrub-ready)</span>
+        <div class="ticker"><div class="track marquee-gsap" data-marquee-gsap>SOLO RAVERS · AMSTERDAM · 21 OCT 2026 ·&nbsp;</div></div>
+      </div>
+    </section>
+
+    <!-- ============ 05 COMPARE ============ -->
+    <section id="compare" class="demo demo-paper">
+      <p class="demo-label">[ 005 / COMPARISON ]</p>
+      <h2>Compare</h2>
+      <p class="demo-note">What each engine costs and when it is worth it.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Effect</th><th>CSS-only</th><th>JS vanilla</th><th>GSAP</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Added JS</td><td>0 KB</td><td>~0.4 KB inline</td><td>~50 KB (core+ScrollTrigger)</td></tr>
+            <tr><td>Dependencies</td><td>none</td><td>none</td><td>gsap</td></tr>
+            <tr><td>Browser support</td><td>Chrome/Edge/Safari 26+</td><td>all evergreen</td><td>all evergreen</td></tr>
+            <tr><td>Fallback needed</td><td>yes (@supports)</td><td>no</td><td>no</td></tr>
+            <tr><td>Control / creatività</td><td>low</td><td>medium</td><td>high</td></tr>
+            <tr><td>Best for</td><td>simple reveals</td><td>precise reveals, staggering</td><td>complex timelines, pinning</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="verdict">
+        <strong>Verdict (discreet intensity):</strong> CSS-only covers most of what this landing needs.
+        JS vanilla is the safe upgrade when you want staggered reveals without a library.
+        GSAP is worth it only if you go experimental (pinning, timelines).
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  .lab { max-width: 1320px; margin: 0 auto; padding: clamp(3rem, 8vw, 8rem) 1.25rem 6rem; }
+  .lab-head { margin-bottom: clamp(3rem, 8vw, 8rem); }
+  .kicker { color: var(--acid); font-size: .72rem; font-weight: bold; letter-spacing: .14em; margin: 0 0 1.5rem; }
+  .lab-head h1 { font-family: var(--display); font-size: clamp(4rem, 12vw, 11rem); font-weight: 400; letter-spacing: -.045em; line-height: .8; margin: 0; text-transform: uppercase; }
+  .lab-head h1 span { color: var(--acid); }
+  .intro { color: var(--muted); font-size: 1rem; line-height: 1.3; margin: 2rem 0; max-width: 40rem; }
+  .intro code { color: var(--acid); font-family: ui-monospace, monospace; }
+  .jump { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .jump a { border: 1px solid var(--line); font-size: .72rem; font-weight: bold; letter-spacing: .08em; padding: .5rem .8rem; text-decoration: none; text-transform: uppercase; transition: background .2s, color .2s; }
+  .jump a:hover { background: var(--acid); color: var(--ink); }
+
+  .controls { align-items: center; display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.2rem; }
+  .toggle { background: var(--acid); border: 0; color: var(--ink); cursor: pointer; font: inherit; font-size: .72rem; font-weight: bold; letter-spacing: .08em; padding: .55rem 1rem; text-transform: uppercase; }
+  .status { color: var(--muted); font-family: ui-monospace, monospace; font-size: .72rem; }
+
+  .demo { border-top: 1px solid var(--line); padding: clamp(2.5rem, 6vw, 6rem) 0; }
+  .demo-paper { background: var(--paper); color: var(--ink); margin: 0 -1.25rem; padding-left: 1.25rem; padding-right: 1.25rem; }
+  .demo-label { font-size: .7rem; font-weight: bold; letter-spacing: .12em; margin: 0 0 1rem; }
+  .demo-paper .demo-label { color: var(--red); }
+  .demo > h2 { font-family: var(--display); font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 400; letter-spacing: -.04em; line-height: .82; margin: 0 0 1rem; text-transform: uppercase; }
+  .demo-note { color: var(--muted); font-size: .95rem; margin: 0 0 2.5rem; max-width: 40rem; }
+  .demo-paper .demo-note { color: #4a4a44; }
+
+  .grid3 { display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
+  .cell { border: 1px solid var(--line); padding: 1.2rem; }
+  .demo-paper .cell { border-color: rgba(17,17,15,.25); }
+  .tag { display: inline-block; font-size: .62rem; font-weight: bold; letter-spacing: .1em; margin-bottom: 1rem; padding: .25rem .5rem; text-transform: uppercase; }
+  .tag-css { background: var(--acid); color: var(--ink); }
+  .tag-js { background: var(--red); color: var(--paper); }
+  .tag-gsap { background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+  .demo-paper .tag-gsap { background: var(--ink); color: var(--paper); border: 0; }
+
+  .card { align-items: center; display: flex; font-family: var(--display); font-size: clamp(1.4rem, 2.2vw, 2.4rem); justify-content: center; letter-spacing: -.02em; min-height: 9rem; text-align: center; text-transform: uppercase; }
+
+  .lineup { display: flex; flex-direction: column; gap: .5rem; list-style: none; margin: 0; padding: 0; }
+  .lineup li { border-bottom: 1px solid var(--line); font-family: var(--display); font-size: clamp(1.3rem, 2.2vw, 2.2rem); letter-spacing: -.01em; padding-bottom: .3rem; text-transform: uppercase; }
+
+  .btn { background: var(--ink); border: 0; color: var(--acid); cursor: pointer; font-family: var(--body); font-size: .85rem; font-weight: bold; letter-spacing: .08em; padding: 1rem 1.4rem; text-transform: uppercase; width: 100%; }
+
+  .tickers { display: flex; flex-direction: column; gap: 1.2rem; }
+  .ticker { border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); overflow: hidden; padding: .7rem 0; position: relative; }
+  .track { display: inline-block; font-family: var(--display); font-size: clamp(1.6rem, 3vw, 3rem); letter-spacing: -.01em; text-transform: uppercase; white-space: nowrap; will-change: transform; }
+
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; font-size: .85rem; min-width: 42rem; width: 100%; }
+  th, td { border-bottom: 1px solid rgba(17,17,15,.2); padding: .8rem .6rem; text-align: left; vertical-align: top; }
+  th { font-size: .68rem; font-weight: bold; letter-spacing: .1em; text-transform: uppercase; }
+  td:first-child { font-weight: bold; }
+  .verdict { font-size: .95rem; line-height: 1.4; margin: 2rem 0 0; max-width: 48rem; }
+  .verdict strong { color: var(--red); }
+
+  @media (max-width: 860px) { .grid3 { grid-template-columns: 1fr; } }
+</style>
+
+<!-- ============ CSS-ONLY (animation-timeline) ============ -->
+<!--
+  NOTE: this is a lab. Motion is ON by default here on purpose, so you can
+  always see the effects even if your OS has "reduce motion" enabled.
+  The live landing keeps the prefers-reduced-motion guard.
+-->
+<style is:global>
+  @supports (animation-timeline: view()) {
+    .reveal-css {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .stagger-css li {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    .stagger-css li:nth-child(1) { animation-delay: 0s; }
+    .stagger-css li:nth-child(2) { animation-delay: .08s; }
+    .stagger-css li:nth-child(3) { animation-delay: .16s; }
+    .stagger-css li:nth-child(4) { animation-delay: .24s; }
+  }
+  @keyframes reveal-up {
+    from { opacity: 0; transform: translateY(2.5rem); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .marquee-css {
+    animation: marquee 20s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .hover-css { transition: background .25s ease, color .25s ease, transform .25s ease; }
+  .hover-css:hover { background: var(--acid); color: var(--ink); transform: translateY(-3px); }
+
+  /* Toggle: when user turns motion OFF from the lab switch */
+  html[data-motion="off"] .marquee-css,
+  html[data-motion="off"] .marquee-js,
+  html[data-motion="off"] .marquee-gsap { animation: none !important; transform: none !important; }
+  html[data-motion="off"] .reveal-css,
+  html[data-motion="off"] .stagger-css li { animation: none !important; opacity: 1 !important; transform: none !important; }
+  html[data-motion="off"] .js-reveal { opacity: 1 !important; transform: none !important; }
+</style>
+
+<!-- ============ JS VANILLA + GSAP ============ -->
+<script>
+  // ===== LAB MOTION CONTROL =====
+  // This is a lab: motion is ON regardless of the OS "reduce motion" setting,
+  // so you can always inspect the effects. Toggle it manually here.
+  const html = document.documentElement;
+  html.setAttribute('data-motion', 'on');
+
+  // ===== STATUS READOUT =====
+  const status = document.getElementById('motion-status');
+  const setStatus = (msg: string) => { if (status) status.textContent = msg; };
+
+  // CSS-only support probe
+  const cssTimelineSupported = CSS.supports('animation-timeline: view()');
+  const scrollDrivenNote = cssTimelineSupported
+    ? 'CSS scroll-driven: supported'
+    : 'CSS scroll-driven: NOT supported (reveal CSS falls back to static)';
+
+  // ===== JS VANILLA: reveal =====
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  const staggerTargets = document.querySelectorAll('[data-stagger]');
+
+  revealTargets.forEach((el) => el.classList.add('js-reveal'));
+  staggerTargets.forEach((el) => el.querySelectorAll('li').forEach((li) => li.classList.add('js-reveal')));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.js-reveal').forEach((el) => io.observe(el));
+
+  // ===== JS VANILLA: magnetic hover =====
+  const magnet = document.querySelector('[data-magnet]');
+  if (magnet) {
+    magnet.addEventListener('pointermove', (e) => {
+      const r = magnet.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) / r.width;
+      const y = (e.clientY - r.top - r.height / 2) / r.height;
+      magnet.style.transform = `translate(${x * 8}px, ${y * 8}px)`;
+    });
+    magnet.addEventListener('pointerleave', () => { magnet.style.transform = ''; });
+  }
+
+  // ===== JS VANILLA: marquee (rAF) =====
+  const marquee = document.querySelector('[data-marquee]');
+  if (marquee) {
+    const track = marquee;
+    const content = track.innerHTML;
+    track.innerHTML = content + content; // duplicate for seamless loop
+    let offset = 0;
+    const speed = 1.5; // px per frame
+    const half = () => track.scrollWidth / 2 || 1;
+    let last = performance.now();
+    const step = (now) => {
+      const dt = (now - last) / 16.67;
+      last = now;
+      offset = (offset + speed * dt) % half();
+      track.style.transform = `translateX(${-offset}px)`;
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // ===== GSAP =====
+  const inView = (el: Element) => {
+    const r = el.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
+  };
+
+  (async () => {
+    try {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap ?? gsapMod.default;
+
+      // GSAP reveal + stagger share one ScrollTrigger import
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger ?? scrollMod.default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      const gsapReveal = document.querySelector('[data-reveal-gsap]');
+      if (gsapReveal) {
+        gsap.set(gsapReveal, { opacity: 0, y: 40 });
+        gsap.to(gsapReveal, {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: gsapReveal, start: 'top 95%', once: true },
+        });
+      }
+
+      const gsapStagger = document.querySelector('[data-stagger-gsap]');
+      if (gsapStagger) {
+        const items = gsapStagger.querySelectorAll('li');
+        gsap.set(items, { opacity: 0, y: 30 });
+        gsap.to(items, {
+          opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12,
+          scrollTrigger: { trigger: gsapStagger, start: 'top 95%', once: true },
+        });
+      }
+
+      // Force a refresh so triggers evaluate against the real layout,
+      // and reveal anything already on screen at load.
+      ScrollTrigger.refresh();
+      setTimeout(() => {
+        if (gsapReveal && inView(gsapReveal)) {
+          gsap.to(gsapReveal, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', overwrite: true });
+        }
+        if (gsapStagger) {
+          const items = gsapStagger.querySelectorAll('li');
+          if (inView(gsapStagger)) {
+            gsap.to(items, { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out', overwrite: true });
+          }
+        }
+      }, 500);
+
+      const gsapMagnet = document.querySelector('[data-magnet-gsap]');
+      if (gsapMagnet) {
+        const xTo = gsap.quickTo(gsapMagnet, 'x', { duration: 0.4, ease: 'power3.out' });
+        const yTo = gsap.quickTo(gsapMagnet, 'y', { duration: 0.4, ease: 'power3.out' });
+        gsapMagnet.addEventListener('pointermove', (e) => {
+          const r = gsapMagnet.getBoundingClientRect();
+          xTo((e.clientX - r.left - r.width / 2) / r.width * 10);
+          yTo((e.clientY - r.top - r.height / 2) / r.height * 10);
+        });
+        gsapMagnet.addEventListener('pointerleave', () => { xTo(0); yTo(0); });
+      }
+
+      const gsapMarquee = document.querySelector('[data-marquee-gsap]');
+      if (gsapMarquee) {
+        const content = gsapMarquee.innerHTML;
+        gsapMarquee.innerHTML = content + content;
+        gsap.to(gsapMarquee, { xPercent: -50, duration: 8, ease: 'none', repeat: -1 });
+      }
+
+      setStatus(`GSAP loaded · ${scrollDrivenNote}`);
+    } catch (err) {
+      setStatus('GSAP failed to load: ' + (err as Error).message);
+      console.error(err);
+    }
+  })();
+
+  // ===== TOGGLE =====
+  const toggle = document.getElementById('motion-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-motion') === 'off' ? 'on' : 'off';
+      html.setAttribute('data-motion', next);
+      toggle.textContent = next === 'on' ? 'Motion: ON' : 'Motion: OFF';
+    });
+  }
+</script>
+
+<style is:global>
+  /* JS-reveal base + visible state (only applied when JS adds .js-reveal) */
+  .js-reveal { opacity: 0; transform: translateY(2.5rem); transition: opacity .6s ease, transform .6s ease; }
+  .js-reveal.is-visible { opacity: 1; transform: none; }
+
+  .hover-js, .hover-gsap { transition: background .25s ease, color .25s ease; }
+  .hover-js:hover, .hover-gsap:hover { background: var(--acid); color: var(--ink); }
+</style>

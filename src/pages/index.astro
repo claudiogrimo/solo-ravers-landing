@@ -3,6 +3,8 @@ import About from '../components/About.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import Lineup from '../components/Lineup.astro';
+import Marquee from '../components/Marquee.astro';
+import MotionController from '../components/MotionController.astro';
 import Tickets from '../components/Tickets.astro';
 import TwoParts from '../components/TwoParts.astro';
 import Venue from '../components/Venue.astro';
@@ -13,6 +15,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title={`${event.title} | Solo Ravers`} description={`Solo Ravers returns to ${event.city} on ${event.dateLabel}.`} ticketUrl={event.ticketUrl} date={event.dateLabel}>
   <main>
     <Hero title={event.title} date={event.dateLabel} city={event.city} ticketUrl={event.ticketUrl} />
+    <Marquee items={['Solo Ravers', 'Amsterdam', '21 Oct 2026', 'De Pijp']} />
     <About text={event.description} genre={event.genre} />
     <TwoParts parts={event.parts} />
     <Lineup artists={event.lineup} />
@@ -20,4 +23,5 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <Tickets ticketUrl={event.ticketUrl} />
   </main>
   <Footer promoter={event.promoter} />
+  <MotionController />
 </BaseLayout>
