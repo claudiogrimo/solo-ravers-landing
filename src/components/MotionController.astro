@@ -1,30 +1,12 @@
 ---
 // Client-side motion orchestrator for the landing page.
 // Loads GSAP + ScrollTrigger once and wires up: marquee, lineup stagger, magnetic hover.
-//
-// Accessibility: by default the page respects prefers-reduced-motion and stays static.
-// Override: add ?motion=on to the URL to force motion on even when the OS asks for
-// reduced motion (useful for previewing the effects).
+// Motion is always on for this page. There is no reduced-motion gate and no URL
+// override: the homepage always animates.
 ---
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const forced = params.get('motion') === 'on';
-  const systemReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const reduce = systemReduce && !forced;
-
-  // ===== If the system asks for reduced motion (and we are not forcing it),
-  // show a tiny, dismissible notice with a link to preview with motion on. =====
-  if (systemReduce && !forced) {
-    const notice = document.createElement('div');
-    notice.className = 'motion-notice';
-    notice.innerHTML =
-      'Motion is off — your system prefers reduced motion. ' +
-      '<a href="?motion=on">Preview with motion →</a>';
-    document.body.appendChild(notice);
-  }
-
-  // ===== MARQUEE (always available; pauses under reduced motion) =====
+  // ===== MARQUEE =====
   const tracks = document.querySelectorAll<HTMLElement>('[data-marquee-track]');
 
   const startMarquee = (gsap: any, track: HTMLElement) => {
@@ -107,8 +89,6 @@
 
   if (tracks.length || document.querySelector('[data-stagger-item]')) {
     (async () => {
-      if (reduce) return; // static content, no motion
-
       const gsapMod = await import('gsap');
       const gsap = gsapMod.gsap ?? gsapMod.default;
       const scrollMod = await import('gsap/ScrollTrigger');
@@ -128,26 +108,3 @@
     })();
   }
 </script>
-
-<style is:global>
-  .motion-notice {
-    background: var(--paper);
-    bottom: 0;
-    color: var(--ink);
-    font-family: var(--body);
-    font-size: .72rem;
-    font-weight: bold;
-    left: 0;
-    letter-spacing: .04em;
-    padding: .5rem .8rem;
-    position: fixed;
-    right: 0;
-    text-align: center;
-    text-transform: uppercase;
-    z-index: 60;
-  }
-  .motion-notice a { color: var(--ink); text-decoration: underline; }
-  @media (max-width: 760px) {
-    .motion-notice { bottom: 4.4rem; } /* sit above the mobile ticket bar */
-  }
-</style>
