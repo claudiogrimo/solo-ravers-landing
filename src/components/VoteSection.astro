@@ -1,0 +1,29 @@
+---
+interface Props {
+  voteUrl: string;
+}
+
+const { voteUrl } = Astro.props;
+---
+
+<section class="vote" id="vote">
+  <div class="vote-intro">
+    <p class="section-label">[ 004 / COMMUNITY VOTE ]</p>
+    <h2>SOLO RAVERS ADE 2026<br /><span>OPENING SLOT DJ CONTEST.</span></h2>
+    <p>Our community submitted 18 sets. Now choose who opens The Return of Solo Ravers Invite in Amsterdam.</p>
+    <p>Listen, rank your favorites, and vote. Your top three choices score points. Full voting instructions are in the form.</p>
+    <a class="vote-cta" href={voteUrl} target="_blank" rel="noopener noreferrer">Vote in the contest <b>↗</b></a>
+  </div>
+</section>
+
+<style>
+  .vote { background: var(--paper); color: var(--ink); padding: clamp(3rem, 8vw, 8rem) 1.25rem; }
+  .vote-intro { margin: 0 auto; max-width: 1320px; display: grid; gap: 1.5rem; grid-template-columns: .55fr 1.45fr 1fr; }
+  .section-label { font-size: .7rem; font-weight: bold; letter-spacing: .12em; margin: 0; }
+  h2 { font-family: var(--display); font-size: clamp(3.5rem, 6.5vw, 7rem); font-weight: 400; letter-spacing: -.04em; line-height: .78; margin: 0; text-transform: uppercase; }
+  h2 span { color: var(--red); }
+  .vote-intro p:not(.section-label) { font-size: 1rem; line-height: 1.25; margin: 0; }
+  .vote-cta { align-items: center; background: var(--red); color: var(--paper); display: flex; font-size: .78rem; font-weight: bold; justify-content: space-between; letter-spacing: .08em; margin-top: .5rem; padding: .9rem 1rem; text-decoration: none; text-transform: uppercase; width: 100%; }
+  .vote-cta b { font-size: 1.15rem; }
+  @media (max-width: 860px) { .vote-intro { grid-template-columns: 1fr; } }
+</style>

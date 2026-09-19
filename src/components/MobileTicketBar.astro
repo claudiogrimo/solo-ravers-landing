@@ -1,10 +1,15 @@
 ---
-interface Props { ticketUrl: string; date: string }
-const { ticketUrl, date } = Astro.props;
+interface Props {
+  ticketUrl: string;
+  date: string;
+  ticketHref?: string;
+  ticketExternal?: boolean;
+}
+const { ticketUrl, date, ticketHref = ticketUrl, ticketExternal = true } = Astro.props;
 ---
 
 <aside class="mobile-ticket-bar" aria-label="Ticket shortcut">
-  <a href={ticketUrl} target="_blank" rel="noopener noreferrer">Get tickets <b>↗</b></a>
+  <a href={ticketHref} target={ticketExternal ? '_blank' : undefined} rel={ticketExternal ? 'noopener noreferrer' : undefined}>Get tickets <b>{ticketExternal ? '↗' : '↓'}</b></a>
 </aside>
 
 <style>

@@ -4,16 +4,27 @@ interface Props {
   date: string;
   city: string;
   ticketUrl: string;
+  ticketHref?: string;
+  ticketExternal?: boolean;
+  primaryCtaVariant?: 'acid' | 'red';
 }
 
-const { title, date, city, ticketUrl } = Astro.props;
+const {
+  title,
+  date,
+  city,
+  ticketUrl,
+  ticketHref = ticketUrl,
+  ticketExternal = true,
+  primaryCtaVariant = 'acid',
+} = Astro.props;
 ---
 
 <header class="hero" id="top">
   <nav aria-label="Primary navigation">
     <a class="brand" href="#top">SOLO<br />RAVERS</a>
     <p>AMSTERDAM<br />2026</p>
-    <a href={ticketUrl} target="_blank" rel="noopener noreferrer">TICKETS ↗</a>
+    <a href={ticketHref} target={ticketExternal ? '_blank' : undefined} rel={ticketExternal ? 'noopener noreferrer' : undefined}>TICKETS ↗</a>
   </nav>
 
   <div class="hero-grid">
@@ -24,7 +35,7 @@ const { title, date, city, ticketUrl } = Astro.props;
         <p><strong>{date}</strong><br />19:00 - late</p>
         <p><strong>{city}</strong><br />Two venues. One long night.</p>
       </div>
-      <a class="cta cta-acid" data-magnet data-magnet-strength="14" href={ticketUrl} target="_blank" rel="noopener noreferrer">Get your ticket <span>↗</span></a>
+      <a class:list={['cta', `cta-${primaryCtaVariant}`]} data-magnet data-magnet-strength="14" href={ticketHref} target={ticketExternal ? '_blank' : undefined} rel={ticketExternal ? 'noopener noreferrer' : undefined}>Get your ticket <span>{ticketExternal ? '↗' : '↓'}</span></a>
     </div>
     <p class="hero-mark">THE RETURN<br />ROUND TWO<br />AMSTERDAM</p>
   </div>
@@ -48,6 +59,7 @@ const { title, date, city, ticketUrl } = Astro.props;
   .details strong { color: var(--acid); }
   .cta { display: inline-flex; font-size: .85rem; font-weight: bold; gap: 2.5rem; justify-content: space-between; letter-spacing: .08em; padding: .85rem 1rem; text-decoration: none; text-transform: uppercase; }
   .cta-acid { background: var(--acid); color: var(--ink); }
+  .cta-red { background: var(--red); color: var(--paper); font-size: 1rem; padding: 1.1rem 1.35rem; }
   .cta span { font-size: 1.1rem; line-height: .7; }
   @media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; margin-top: 8rem; } .hero-mark { text-align: left; } h1 { font-size: clamp(4.4rem, 20vw, 7rem); } .details { margin-top: 2rem; } }
   @media (prefers-reduced-motion: no-preference) { .hero::before { animation: drift 12s linear infinite; } @keyframes drift { to { background-position: 3rem 3rem; } } }

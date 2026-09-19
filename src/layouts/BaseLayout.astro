@@ -8,9 +8,20 @@ interface Props {
   date: string;
   ogTitle?: string;
   ogDescription?: string;
+  mobileTicketHref?: string;
+  mobileTicketExternal?: boolean;
 }
 
-const { title, description, ticketUrl, date, ogTitle, ogDescription } = Astro.props;
+const {
+  title,
+  description,
+  ticketUrl,
+  date,
+  ogTitle,
+  ogDescription,
+  mobileTicketHref = ticketUrl,
+  mobileTicketExternal = true,
+} = Astro.props;
 
 const canonicalUrl = 'https://soloravers.net/';
 const socialTitle = ogTitle ?? 'Solo Ravers Invite — Amsterdam, 21 Oct 2026';
@@ -50,7 +61,7 @@ const socialDescription =
   </head>
   <body>
     <slot />
-    <MobileTicketBar ticketUrl={ticketUrl} date={date} />
+    <MobileTicketBar ticketUrl={ticketUrl} date={date} ticketHref={mobileTicketHref} ticketExternal={mobileTicketExternal} />
   </body>
 </html>
 

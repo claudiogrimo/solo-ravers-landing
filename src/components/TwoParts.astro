@@ -12,8 +12,11 @@ interface Part {
   tone: string;
 }
 
-interface Props { parts: Part[] }
-const { parts } = Astro.props;
+interface Props {
+  parts: Part[];
+  showActions?: boolean;
+}
+const { parts, showActions = true } = Astro.props;
 ---
 
 <section class="parts" id="parts">
@@ -28,7 +31,7 @@ const { parts } = Astro.props;
         <div class="part-name"><span>{part.name}</span><strong>{part.time}</strong></div>
         <div class="venue"><strong>{part.venue}</strong><p>{part.address}</p></div>
         <div class="ticket"><span>{part.ticket}</span><p>{part.note}</p></div>
-        <a href={part.href} class="part-link" data-magnet target={part.href.startsWith('http') ? '_blank' : undefined} rel={part.href.startsWith('http') ? 'noopener noreferrer' : undefined}>{part.action} <b>↗</b></a>
+        {showActions && <a href={part.href} class="part-link" data-magnet target={part.href.startsWith('http') ? '_blank' : undefined} rel={part.href.startsWith('http') ? 'noopener noreferrer' : undefined}>{part.action} <b>↗</b></a>}
       </article>
     ))}
   </div>
