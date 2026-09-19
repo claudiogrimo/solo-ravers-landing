@@ -8,10 +8,12 @@ interface Props {
   artists: string[];
   voteHref?: string;
   players?: Player[];
+  b2b?: string[];
 }
 
-const { artists, voteHref, players = [] } = Astro.props;
+const { artists, voteHref, players = [], b2b = [] } = Astro.props;
 const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCase(), player]));
+const b2bSet = new Set(b2b.map((artist) => artist.toLowerCase()));
 ---
 
 <section class="lineup" id="lineup">
@@ -20,14 +22,16 @@ const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCas
     <p>SELECTORS FOR THE RETURN</p>
   </div>
   <ol>
-    {artists.map((artist, index) => {
+    {(() => artists.map((artist, index) => {
       const player = playerByArtist.get(artist.toLowerCase());
+      const isB2b = b2bSet.has(artist.toLowerCase());
 
       return (
-        <li class:list={{ 'has-player': Boolean(player) }} data-stagger-item>
+        <li class:list={{ 'has-player': Boolean(player), 'is-b2b': isB2b }} data-stagger-item>
           <div class="artist-row">
             <span>{String(index + 1).padStart(2, '0')}</span>
             {voteHref && artist.toLowerCase() === 'dj contest winner' ? <a href={voteHref}><strong>{artist}</strong><i>↘</i></a> : <><strong>{artist}</strong><i>↘</i></>}
+            {isB2b && <em class="b2b-tag">b2b</em>}
           </div>
           {player && (
             <iframe
@@ -42,7 +46,7 @@ const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCas
           )}
         </li>
       );
-    })}
+    }))()}
   </ol>
 </section>
 
@@ -54,7 +58,17 @@ const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCas
   .section-label { color: var(--acid); }
   ol { border-top: 1px solid var(--line); list-style: none; margin-top: 2rem; padding: 0; }
   li { border-bottom: 1px solid var(--line); padding: .85rem 0; }
-  .artist-row { align-items: center; display: grid; grid-template-columns: .2fr 1fr .1fr; }
+  .is-b2b { padding-left: 1.1rem; position: relative; }
+  .is-b2b::before {
+    background: var(--acid);
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 8px;
+  }
+  .artist-row { align-items: center; display: grid; grid-template-columns: .2fr 1fr .1fr; position: relative; }
   li span { color: var(--acid); font-size: .74rem; font-weight: bold; }
   li strong { font-family: var(--display); font-size: clamp(3.2rem, 9vw, 9.5rem); font-weight: 400; letter-spacing: -.04em; line-height: .8; text-transform: uppercase; }
   li a { align-items: center; color: inherit; display: contents; text-decoration: none; }
@@ -62,4 +76,21 @@ const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCas
   li i { color: var(--muted); font-size: 1.4rem; font-style: normal; text-align: right; }
   .has-player { padding-bottom: 1rem; }
   iframe { border: 0; display: block; margin: 1rem 0 0; width: 100%; }
+  .b2b-tag {
+    background: var(--acid);
+    color: var(--ink);
+    font-size: .65rem;
+    font-style: normal;
+    font-weight: bold;
+    letter-spacing: .1em;
+    line-height: 1;
+    padding: .35rem .4rem;
+    position: absolute;
+    right: 2.5rem;
+    text-transform: uppercase;
+    top: .1rem;
+  }
+  @media (max-width: 600px) {
+    .b2b-tag { right: 2rem; }
+  }
 </style>

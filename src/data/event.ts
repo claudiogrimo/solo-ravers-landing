@@ -33,7 +33,8 @@ export const event = {
       tone: 'red',
     },
   ],
-  lineup: ['Clodol', 'DE//SIRE', 'SLURPiSS', 'DJ contest winner'],
+  lineup: ['Clodol', 'oatmilk', 'DE//SIRE', 'SLURPiSS', 'DJ contest winner'],
+  b2b: ['Clodol', 'oatmilk'],
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Huis+van+Iemand+Anders+Van+Woustraat+2Hs+Amsterdam',
   ticketUrl: 'https://ra.co/events/2521472',
