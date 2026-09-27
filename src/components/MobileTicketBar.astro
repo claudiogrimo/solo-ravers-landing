@@ -9,7 +9,7 @@ const { ticketUrl, date, ticketHref = ticketUrl, ticketExternal = true } = Astro
 ---
 
 <aside class="mobile-ticket-bar" aria-label="Ticket shortcut">
-  <a href={ticketHref} target={ticketExternal ? '_blank' : undefined} rel={ticketExternal ? 'noopener noreferrer' : undefined}>Get tickets <b>{ticketExternal ? '↗' : '↓'}</b></a>
+  <a class="pulse" href={ticketHref} target={ticketExternal ? '_blank' : undefined} rel={ticketExternal ? 'noopener noreferrer' : undefined}>Get tickets <b>{ticketExternal ? '↗' : '↓'}</b></a>
 </aside>
 
 <style>
@@ -42,5 +42,10 @@ const { ticketUrl, date, ticketHref = ticketUrl, ticketExternal = true } = Astro
       width: 100%;
     }
     .mobile-ticket-bar a b { font-size: 1rem; }
+    .mobile-ticket-bar a.pulse { animation: stickyPulse 3s ease-in-out infinite; }
+    @keyframes stickyPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.025); }
+    }
   }
 </style>

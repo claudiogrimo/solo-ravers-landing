@@ -70,6 +70,49 @@
     }
   };
 
+  // ===== TICKETS ATTENTION NUDGE =====
+  // When the access section scrolls into view, the paid-ticket CTA pulses and
+  // shakes briefly to signal where to click. Fires on every page load (not once)
+  // and works on desktop and mobile. Amplitude is intentionally small.
+  const setupTicketsNudge = (gsap: any, ScrollTrigger: any) => {
+    const target = document.querySelector<HTMLElement>('[data-ticket-shake]');
+    const section = target?.closest('#tickets') as HTMLElement | null;
+    if (!target || !section) return;
+
+    let hasInteracted = false;
+    target.addEventListener('pointerdown', () => { hasInteracted = true; }, { once: true });
+
+    const play = () => {
+      if (hasInteracted) return;
+      gsap.timeline()
+        .to(target, { scale: 1.03, duration: 0.18, ease: 'power2.out' })
+        .to(target, {
+          keyframes: [
+            { x: -3, rotate: -0.7 },
+            { x: 3, rotate: 0.7 },
+            { x: -3, rotate: -0.7 },
+            { x: 3, rotate: 0.7 },
+            { x: 0, rotate: 0 },
+          ],
+          duration: 0.6,
+          ease: 'power1.inOut',
+        })
+        .to(target, { scale: 1, duration: 0.2, ease: 'power2.out' });
+    };
+
+    try {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 70%',
+        end: 'top 30%',
+        onEnter: play,
+        onEnterBack: play,
+      });
+    } catch (err) {
+      console.error('Ticket nudge setup failed; section remains static.', err);
+    }
+  };
+
   // ===== MAGNETIC HOVER (desktop / fine pointer only) =====
   const setupMagnet = (gsap: any) => {
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -87,7 +130,7 @@
     });
   };
 
-  if (tracks.length || document.querySelector('[data-stagger-item]')) {
+  if (tracks.length || document.querySelector('[data-stagger-item]') || document.querySelector('[data-ticket-shake]')) {
     (async () => {
       const gsapMod = await import('gsap');
       const gsap = gsapMod.gsap ?? gsapMod.default;
@@ -97,6 +140,7 @@
 
       tracks.forEach((t) => startMarquee(gsap, t));
       setupStagger(gsap, ScrollTrigger);
+      setupTicketsNudge(gsap, ScrollTrigger);
       setupMagnet(gsap);
 
       // Recompute trigger positions once the full layout (fonts, marquee) settles.

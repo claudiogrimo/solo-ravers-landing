@@ -22,8 +22,8 @@ const {
   <div class="actions">
     {preview ? <>
       <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>PRE-DRINKS AT TAPMARIN</span><strong>Free pass</strong><b>↗</b></a>
-      <a class="ticket-action muted" data-magnet data-magnet-strength="6" href={paidTicketUrl} target="_blank" rel="noopener noreferrer"><span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Tickets available soon</strong><b>↗</b></a>
-      <a class="ticket-action red" data-magnet data-magnet-strength="6" href={voteUrl} target="_blank" rel="noopener noreferrer"><span>OPENING SLOT DJ CONTEST</span><strong>DJ contest vote</strong><b>↗</b></a>
+      <a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href={paidTicketUrl} target="_blank" rel="noopener noreferrer"><span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Get tickets</strong><b>↗</b></a>
+      <a class="ticket-action outline" data-magnet data-magnet-strength="6" href={voteUrl} target="_blank" rel="noopener noreferrer"><span>OPENING SLOT DJ CONTEST</span><strong>DJ contest vote</strong><b>↗</b></a>
     </> : <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>RESIDENT ADVISOR</span><strong>Get tickets</strong><b>↗</b></a>}
   </div>
 </section>
@@ -42,6 +42,7 @@ const {
   .acid { background: var(--acid); }
    .red { background: var(--red); color: var(--paper); }
    .muted { background: #5e5c56; color: var(--paper); filter: saturate(.25); }
+   .outline { background: transparent; border: 2px solid var(--paper); }
    a.ticket-action:hover { outline: 2px solid var(--paper); outline-offset: 3px; }
   @media (max-width: 760px) { .tickets { grid-template-columns: 1fr; } }
 </style>
