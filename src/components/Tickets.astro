@@ -42,7 +42,8 @@ const {
   .acid { background: var(--acid); }
    .red { background: var(--red); color: var(--paper); }
    .muted { background: #5e5c56; color: var(--paper); filter: saturate(.25); }
-   .outline { background: transparent; border: 2px solid var(--paper); }
+   .outline { background: transparent; border: 2px solid var(--paper); color: var(--paper); }
    a.ticket-action:hover { outline: 2px solid var(--paper); outline-offset: 3px; }
+   a.ticket-action.outline:hover { background: var(--paper); color: var(--ink); outline: 0; }
   @media (max-width: 760px) { .tickets { grid-template-columns: 1fr; } }
 </style>
