@@ -2,6 +2,15 @@ export const event = {
   title: 'The Return of Solo Ravers Invite',
   dateLabel: 'Wednesday, 21 October 2026',
   dateIso: '2026-10-21T19:00:00+02:00',
+  // First ticket release: Thursday 1 October 2026, 20:30 Europe/Amsterdam (CEST, UTC+2).
+  ticketsReleaseAtIso: '2026-10-01T18:30:00Z',
+  // Ticket tiers. Prices are the totals the buyer pays. Order matters: first tier is the
+  // one opening at the release above; later tiers carry no public dates on purpose.
+  ticketTiers: [
+    { label: 'First release', price: '8 euro', featured: true },
+    { label: 'Second release', price: '15 euro', featured: false },
+    { label: 'Final release', price: '20 euro', featured: false },
+  ],
   city: 'Amsterdam / De Pijp',
   promoter: 'Solo Ravers',
   genre: 'Techno',

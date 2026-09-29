@@ -77,8 +77,9 @@
   const setupTicketsNudge = (gsap: any, ScrollTrigger: any) => {
     const target = document.querySelector<HTMLElement>('[data-ticket-shake]');
     const section = target?.closest('#tickets') as HTMLElement | null;
-    if (!target || !section) return;
+    if (!target || !section || target.dataset.ticketNudgeReady) return;
 
+    target.dataset.ticketNudgeReady = 'true';
     let hasInteracted = false;
     target.addEventListener('pointerdown', () => { hasInteracted = true; }, { once: true });
 
@@ -142,6 +143,15 @@
       setupStagger(gsap, ScrollTrigger);
       setupTicketsNudge(gsap, ScrollTrigger);
       setupMagnet(gsap);
+      window.addEventListener('sr:tickets-unlocked', () => {
+        setupTicketsNudge(gsap, ScrollTrigger);
+        setupMagnet(gsap);
+        ScrollTrigger.refresh();
+        requestAnimationFrame(() => {
+          const target = document.querySelector<HTMLElement>('[data-ticket-shake]');
+          if (target) gsap.fromTo(target, { scale: 1 }, { scale: 1.03, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' });
+        });
+      });
 
       // Recompute trigger positions once the full layout (fonts, marquee) settles.
       if (document.readyState === 'complete') {

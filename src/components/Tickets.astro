@@ -1,32 +1,59 @@
 ---
+import { event } from '../data/event';
+
 interface Props {
   ticketUrl: string;
   paidTicketUrl?: string;
   voteUrl?: string;
-  preview?: boolean;
 }
 const {
   ticketUrl,
   paidTicketUrl = ticketUrl,
   voteUrl = ticketUrl,
-  preview = false,
 } = Astro.props;
+
+const { ticketsReleaseAtIso, ticketTiers } = event;
+
+const firstTier = ticketTiers.find((tier) => tier.featured);
 ---
 
 <section class="tickets" id="tickets">
   <p class="section-label">[ 005 / ACCESS ]</p>
   <div class="ticket-copy">
     <h2>GET IN.<br /><span>PROPERLY.</span></h2>
-    <p>{preview ? 'Choose your route for pre-drinks, the main party, or the DJ contest vote.' : 'All access information and tickets live on Resident Advisor. Read the event details before you arrive.'}</p>
+    <p>Choose your route for pre-drinks, the main party, or the DJ contest vote.</p>
   </div>
   <div class="actions">
-    {preview ? <>
-      <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>PRE-DRINKS AT TAPMARIN</span><strong>Free pass</strong><b>↗</b></a>
-      <a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href={paidTicketUrl} target="_blank" rel="noopener noreferrer"><span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Get tickets</strong><b>↗</b></a>
-      <a class="ticket-action outline" data-magnet data-magnet-strength="6" href={voteUrl} target="_blank" rel="noopener noreferrer"><span>OPENING SLOT DJ CONTEST</span><strong>DJ contest vote</strong><b>↗</b></a>
-    </> : <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>RESIDENT ADVISOR</span><strong>Get tickets</strong><b>↗</b></a>}
+    <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>PRE-DRINKS AT TAPMARIN</span><strong>Free pass</strong><b>↗</b></a>
+    <div data-ticket-paid data-release-at={ticketsReleaseAtIso} data-ticket-url={paidTicketUrl} data-ticket-price={firstTier?.price}>
+      <button class="ticket-action muted" type="button" disabled aria-disabled="true">
+        <span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Unlocks Thu 20:30</strong><b>↗</b>
+        <small data-countdown>Thu 20:30 (Amsterdam)</small>
+        {firstTier && <em class="ticket-price">{firstTier.price}</em>}
+      </button>
+    </div>
+    <a class="ticket-action outline" data-magnet data-magnet-strength="6" href={voteUrl} target="_blank" rel="noopener noreferrer"><span>OPENING SLOT DJ CONTEST</span><strong>DJ contest vote</strong><b>↗</b></a>
   </div>
+
+  <aside class="prices" aria-label="Ticket prices">
+    <p class="prices-label">MAIN PARTY TICKETS</p>
+    <ul class="price-list">
+      {ticketTiers.map((tier) => (
+        <li class:list={['price', { 'price-featured': tier.featured }]}>
+          <span class="price-tier">{tier.label}</span>
+          <strong class="price-value">{tier.price}</strong>
+        </li>
+      ))}
+    </ul>
+    {firstTier?.featured && <p class="prices-note">First release opens at 20:30 — {firstTier.price}. Later releases will follow. Prices are the total paid per ticket.</p>}
+  </aside>
 </section>
+
+<script>
+  import { initTicketsGate } from '../scripts/tickets-gate.js';
+
+  initTicketsGate();
+</script>
 
 <style>
   .tickets { display: grid; gap: 2rem; grid-template-columns: .4fr 1.1fr 1fr; margin: 0 auto; max-width: 1320px; padding: clamp(3rem, 8vw, 8rem) 1.25rem; }
@@ -39,11 +66,24 @@ const {
   .ticket-action span { font-size: .68rem; font-weight: bold; grid-column: 1; letter-spacing: .1em; }
   .ticket-action strong { font-family: var(--display); font-size: clamp(2rem, 3vw, 3.2rem); font-weight: 400; grid-column: 1; letter-spacing: -.03em; line-height: .8; text-transform: uppercase; }
   .ticket-action b { font-size: 2rem; grid-column: 2; grid-row: 1 / span 2; }
+  .ticket-action small { font-size: .68rem; font-weight: bold; grid-column: 1; letter-spacing: .1em; }
+  .ticket-price { color: var(--paper); font-family: var(--display); font-size: 1.4rem; font-style: normal; font-weight: 400; grid-column: 1; letter-spacing: -.01em; line-height: .9; text-transform: uppercase; }
+  button.ticket-action { border: 0; font: inherit; text-align: left; width: 100%; }
+  button.ticket-action:disabled { cursor: not-allowed; }
+  .prices { border: 1px solid var(--line); display: grid; gap: .7rem; grid-column: 3; margin-top: .4rem; padding: .9rem 1rem; }
+  .prices-label { color: var(--muted); font-size: .62rem; font-weight: bold; letter-spacing: .14em; margin: 0; }
+  .price-list { display: grid; gap: .45rem; list-style: none; margin: 0; padding: 0; }
+  .price { align-items: baseline; border-top: 1px solid var(--line); display: flex; gap: .75rem; justify-content: space-between; padding-top: .45rem; }
+  .price-tier { color: var(--muted); font-size: .66rem; font-weight: bold; letter-spacing: .1em; text-transform: uppercase; }
+  .price-value { font-family: var(--display); font-size: 1.5rem; font-weight: 400; letter-spacing: -.02em; line-height: .9; text-transform: uppercase; }
+  .price-featured .price-value { color: var(--acid); }
+  .price-featured .price-tier { color: var(--paper); }
+  .prices-note { color: var(--muted); font-size: .68rem; line-height: 1.3; margin: 0; }
   .acid { background: var(--acid); }
    .red { background: var(--red); color: var(--paper); }
    .muted { background: #5e5c56; color: var(--paper); filter: saturate(.25); }
    .outline { background: transparent; border: 2px solid var(--paper); color: var(--paper); }
    a.ticket-action:hover { outline: 2px solid var(--paper); outline-offset: 3px; }
    a.ticket-action.outline:hover { background: var(--paper); color: var(--ink); outline: 0; }
-  @media (max-width: 760px) { .tickets { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .tickets { grid-template-columns: 1fr; } .prices { grid-column: 1; } }
 </style>
