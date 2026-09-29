@@ -8,10 +8,32 @@ export const formatCountdown = (remainingMs) => {
   return days > 0 ? `${days}d ${clock}` : clock;
 };
 
+// Astro scopes component CSS with `data-astro-cid-*` attributes on every element.
+// The unlocked link is built at runtime, so we must copy those scope attributes
+// onto it (and its inner elements), otherwise the scoped rules never match and
+// the CTA loses its grid, padding and background.
+const collectScopeAttrs = (node) => {
+  const attrs = [];
+  for (const attr of node?.attributes ?? []) {
+    if (attr.name.startsWith('data-astro-cid-')) attrs.push(attr.name);
+  }
+  return attrs;
+};
+
+const scopeMarkup = (scopeAttrs) => {
+  const suffix = scopeAttrs.length ? ' ' + scopeAttrs.join(' ') : '';
+  return {
+    open: suffix,
+    inner: suffix,
+  };
+};
+
 const unlockPaidTicket = (container, ticketUrl) => {
   const price = container.dataset.ticketPrice;
-  const priceMarkup = price ? `<em class="ticket-price">${price}</em>` : '';
-  container.innerHTML = `<a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href="${ticketUrl}" target="_blank" rel="noopener noreferrer"><span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Get tickets</strong><b>↗</b>${priceMarkup}</a>`;
+  const scopeAttrs = collectScopeAttrs(container);
+  const s = scopeMarkup(scopeAttrs);
+  const priceMarkup = price ? `<em class="ticket-price"${s.inner}>${price}</em>` : '';
+  container.innerHTML = `<a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href="${ticketUrl}" target="_blank" rel="noopener noreferrer"${s.open}><span${s.inner}>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong${s.inner}>Get tickets</strong><b${s.inner}>↗</b>${priceMarkup}</a>`;
   window.dispatchEvent(new Event('sr:tickets-unlocked'));
 };
 
