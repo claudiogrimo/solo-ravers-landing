@@ -6,14 +6,31 @@ interface Player {
 
 interface Props {
   artists: string[];
-  voteHref?: string;
   players?: Player[];
   b2b?: string[];
+  winner?: string;
+  winnerPlaceholder?: string;
+  announceAtIso?: string;
 }
 
-const { artists, voteHref, players = [], b2b = [] } = Astro.props;
+const {
+  artists,
+  players = [],
+  b2b = [],
+  winner,
+  winnerPlaceholder = 'TBA',
+  announceAtIso,
+} = Astro.props;
 const playerByArtist = new Map(players.map((player) => [player.artist.toLowerCase(), player]));
 const b2bSet = new Set(b2b.map((artist) => artist.toLowerCase()));
+
+// The winner slot renders the placeholder server-side. It is revealed at `announceAtIso`
+// by the shared winner gate (see src/scripts/vote-gate.js), which reads the winner name
+// from `data-lineup-winner-name`. `data-lineup-winner` marks the element to swap.
+const rows = [
+  ...artists.map((artist) => ({ artist, isWinner: false })),
+  ...(winner ? [{ artist: winnerPlaceholder, isWinner: true }] : []),
+];
 ---
 
 <section class="lineup" id="lineup">
@@ -22,15 +39,17 @@ const b2bSet = new Set(b2b.map((artist) => artist.toLowerCase()));
     <p>SELECTORS FOR THE RETURN</p>
   </div>
   <ol>
-    {(() => artists.map((artist, index) => {
-      const player = playerByArtist.get(artist.toLowerCase());
-      const isB2b = b2bSet.has(artist.toLowerCase());
+    {rows.map((row, index) => {
+      const player = playerByArtist.get(row.artist.toLowerCase());
+      const isB2b = b2bSet.has(row.artist.toLowerCase());
 
       return (
-        <li class:list={{ 'has-player': Boolean(player), 'is-b2b': isB2b }} data-stagger-item>
+        <li class:list={{ 'has-player': Boolean(player), 'is-b2b': isB2b, 'is-winner': row.isWinner }} data-stagger-item>
           <div class="artist-row">
             <span>{String(index + 1).padStart(2, '0')}</span>
-            {voteHref && artist.toLowerCase() === 'dj contest winner' ? <a href={voteHref}><strong>{artist}</strong><i>↘</i></a> : <><strong>{artist}</strong><i>↘</i></>}
+            {row.isWinner
+              ? <strong data-lineup-winner data-lineup-winner-name={winner} data-announce-at={announceAtIso}>{winnerPlaceholder}</strong>
+              : <strong>{row.artist}</strong>}<i>↘</i>
             {isB2b && <em class="b2b-tag">b2b</em>}
           </div>
           {player && (
@@ -46,9 +65,15 @@ const b2bSet = new Set(b2b.map((artist) => artist.toLowerCase()));
           )}
         </li>
       );
-    }))()}
+    })}
   </ol>
 </section>
+
+<script>
+  import { initVoteGate } from '../scripts/vote-gate.js';
+
+  initVoteGate();
+</script>
 
 <style>
   .lineup { padding: clamp(3rem, 8vw, 8rem) 1.25rem; }
@@ -71,8 +96,6 @@ const b2bSet = new Set(b2b.map((artist) => artist.toLowerCase()));
   .artist-row { align-items: center; display: grid; grid-template-columns: .2fr 1fr .1fr; position: relative; }
   li span { color: var(--acid); font-size: .74rem; font-weight: bold; }
   li strong { font-family: var(--display); font-size: clamp(3.2rem, 9vw, 9.5rem); font-weight: 400; letter-spacing: -.04em; line-height: .8; text-transform: uppercase; }
-  li a { align-items: center; color: inherit; display: contents; text-decoration: none; }
-  li a strong { color: var(--acid); text-decoration: underline; text-decoration-thickness: .05em; text-underline-offset: .1em; }
   li i { color: var(--muted); font-size: 1.4rem; font-style: normal; text-align: right; }
   .has-player { padding-bottom: 1rem; }
   iframe { border: 0; display: block; margin: 1rem 0 0; width: 100%; }

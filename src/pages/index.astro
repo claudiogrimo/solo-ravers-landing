@@ -15,7 +15,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const access = {
   freePassUrl: event.ticketUrl,
   paidTicketUrl: 'https://tally.so/r/xXOJZ5',
-  voteUrl: 'https://tally.so/r/LZ8vLl',
 };
 
 const contestPlayers = [
@@ -44,10 +43,10 @@ const contestPlayers = [
     <Marquee items={['Solo Ravers', 'Amsterdam', '21 Oct 2026', 'De Pijp']} />
     <About text={event.description} genre={event.genre} />
     <TwoParts parts={event.parts} showActions={false} />
-    <Lineup artists={event.lineup} voteHref="#vote" players={contestPlayers} b2b={event.b2b} />
-    <VoteSection voteUrl={access.voteUrl} />
+    <Lineup artists={event.lineup} players={contestPlayers} b2b={event.b2b} winner={event.contestWinner} winnerPlaceholder={event.lineupWinnerPlaceholder} announceAtIso={event.voteClosesAtIso} />
+    <VoteSection />
     <Venue address={event.parts[1].address} mapsUrl={event.mapsUrl} />
-    <Tickets ticketUrl={access.freePassUrl} paidTicketUrl={access.paidTicketUrl} voteUrl={access.voteUrl} />
+    <Tickets ticketUrl={access.freePassUrl} paidTicketUrl={access.paidTicketUrl} />
   </main>
   <Footer promoter={event.promoter} />
   <MotionController />

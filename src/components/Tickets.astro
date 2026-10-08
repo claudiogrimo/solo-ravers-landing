@@ -4,12 +4,10 @@ import { event } from '../data/event';
 interface Props {
   ticketUrl: string;
   paidTicketUrl?: string;
-  voteUrl?: string;
 }
 const {
   ticketUrl,
   paidTicketUrl = ticketUrl,
-  voteUrl = ticketUrl,
 } = Astro.props;
 
 const { ticketsReleaseAtIso, ticketTiers } = event;
@@ -21,7 +19,7 @@ const firstTier = ticketTiers.find((tier) => tier.featured);
   <p class="section-label">[ 005 / ACCESS ]</p>
   <div class="ticket-copy">
     <h2>GET IN.<br /><span>PROPERLY.</span></h2>
-    <p>Choose your route for pre-drinks, the main party, or the DJ contest vote.</p>
+    <p>Choose your route for pre-drinks or the main party.</p>
   </div>
   <div class="actions">
     <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>PRE-DRINKS AT TAPMARIN</span><strong>Free pass</strong><b>↗</b></a>
@@ -32,7 +30,6 @@ const firstTier = ticketTiers.find((tier) => tier.featured);
         {firstTier && <em class="ticket-price">{firstTier.price}</em>}
       </button>
     </div>
-    <a class="ticket-action outline" data-magnet data-magnet-strength="6" href={voteUrl} target="_blank" rel="noopener noreferrer"><span>OPENING SLOT DJ CONTEST</span><strong>DJ contest vote</strong><b>↗</b></a>
   </div>
 
   <aside class="prices" aria-label="Ticket prices">
@@ -40,12 +37,15 @@ const firstTier = ticketTiers.find((tier) => tier.featured);
     <ul class="price-list">
       {ticketTiers.map((tier) => (
         <li class:list={['price', { 'price-featured': tier.featured }]}>
-          <span class="price-tier">{tier.label}</span>
+          <span class="price-when">
+            <span class="price-tier">{tier.label}</span>
+            {tier.windowLabel && <span class="price-window">{tier.windowLabel}</span>}
+          </span>
           <strong class="price-value">{tier.price}</strong>
         </li>
       ))}
     </ul>
-    {firstTier?.featured && <p class="prices-note">First release opens at 20:30 — {firstTier.price}. Later releases will follow. Prices are the total paid per ticket.</p>}
+    <p class="prices-note">15 euro from Wed 14 Oct, 21:30. 20 euro from Mon 19 Oct, 21:30. Prices are the total paid per ticket.</p>
   </aside>
 </section>
 
@@ -74,7 +74,9 @@ const firstTier = ticketTiers.find((tier) => tier.featured);
   .prices-label { color: var(--muted); font-size: .62rem; font-weight: bold; letter-spacing: .14em; margin: 0; }
   .price-list { display: grid; gap: .45rem; list-style: none; margin: 0; padding: 0; }
   .price { align-items: baseline; border-top: 1px solid var(--line); display: flex; gap: .75rem; justify-content: space-between; padding-top: .45rem; }
+  .price-when { display: grid; gap: .15rem; }
   .price-tier { color: var(--muted); font-size: .66rem; font-weight: bold; letter-spacing: .1em; text-transform: uppercase; }
+  .price-window { color: var(--muted); font-size: .6rem; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; }
   .price-value { font-family: var(--display); font-size: 1.5rem; font-weight: 400; letter-spacing: -.02em; line-height: .9; text-transform: uppercase; }
   .price-featured .price-value { color: var(--acid); }
   .price-featured .price-tier { color: var(--paper); }
