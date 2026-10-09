@@ -43,7 +43,7 @@ const contestPlayers = [
     <Marquee items={['Solo Ravers', 'Amsterdam', '21 Oct 2026', 'De Pijp']} />
     <About text={event.description} genre={event.genre} />
     <TwoParts parts={event.parts} showActions={false} />
-    <Lineup artists={event.lineup} players={contestPlayers} b2b={event.b2b} winner={event.contestWinner} winnerPlaceholder={event.lineupWinnerPlaceholder} announceAtIso={event.voteClosesAtIso} />
+    <Lineup lineup={event.lineup} players={contestPlayers} winner={event.contestWinner} winnerPlaceholder={event.lineupWinnerPlaceholder} announceAtIso={event.voteClosesAtIso} />
     <VoteSection />
     <Venue address={event.parts[1].address} mapsUrl={event.mapsUrl} />
     <Tickets ticketUrl={access.freePassUrl} paidTicketUrl={access.paidTicketUrl} />

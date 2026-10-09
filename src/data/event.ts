@@ -52,11 +52,19 @@ export const event = {
       tone: 'red',
     },
   ],
-  // Slot 05 is the DJ contest winner. Until the announcement (see contestWinner and
-  // voteClosesAtIso) it shows the TBA placeholder; the Lineup gate swaps it at that instant.
-  lineup: ['Clodol', 'oatmilk', 'DE//SIRE', 'SLURPiSS'],
+  // Lineup in order of appearance, each with its set window. `winner: true` marks the DJ
+  // contest slot: it renders `lineupWinnerPlaceholder` (TBA) until the announcement (see
+  // contestWinner and voteClosesAtIso), then the Lineup gate swaps in the real name.
+  // `b2b: true` marks a back-to-back set. The two b2b acts are listed as separate rows
+  // that share the same slot window; the `b2bGroup` key ties them together visually.
+  lineup: [
+    { name: 'YSKM', slot: '21:30 / 22:45', winner: true, b2b: false, b2bGroup: null },
+    { name: 'Clodol', slot: '22:45 / 00:00', winner: false, b2b: true, b2bGroup: 'clodol-oatmilk' },
+    { name: 'oatmilk', slot: '22:45 / 00:00', winner: false, b2b: true, b2bGroup: 'clodol-oatmilk' },
+    { name: 'DE//SIRE', slot: '00:00 / 01:15', winner: false, b2b: false, b2bGroup: null },
+    { name: 'SLURPiSS', slot: '01:15 / 02:30', winner: false, b2b: false, b2bGroup: null },
+  ],
   lineupWinnerPlaceholder: 'TBA',
-  b2b: ['Clodol', 'oatmilk'],
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Huis+van+Iemand+Anders+Van+Woustraat+2Hs+Amsterdam',
   ticketUrl: 'https://ra.co/events/2521472',
