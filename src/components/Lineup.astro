@@ -45,13 +45,12 @@ const slotPlayers = (slot: Slot) =>
     <p>SELECTORS FOR THE RETURN</p>
   </div>
   <ol>
-    {lineup.map((slot, index) => {
+    {lineup.map((slot) => {
       const embeds = slotPlayers(slot);
 
       return (
         <li class:list={{ 'has-player': embeds.length > 0, 'is-b2b': slot.b2b, 'is-winner': slot.winner }} data-stagger-item>
           <div class="artist-row">
-            <span class="artist-index">{String(index + 1).padStart(2, '0')}</span>
             <span class="artist-name">{slot.winner
               ? <strong data-lineup-winner data-lineup-winner-name={winner} data-announce-at={announceAtIso}>{winnerPlaceholder}</strong>
               : <strong>{slot.name}</strong>}
@@ -99,9 +98,8 @@ const slotPlayers = (slot: Slot) =>
     top: 0;
     width: 8px;
   }
-  .artist-row { align-items: start; display: grid; column-gap: 1.5rem; grid-template-columns: 1.6rem 1fr auto; position: relative; }
-  .artist-index { color: var(--acid); font-size: .74rem; font-weight: bold; padding-top: .35rem; }
-  .artist-name { align-items: flex-start; display: flex; gap: .8rem; min-width: 0; }
+  .artist-row { align-items: baseline; display: grid; column-gap: 1.5rem; grid-template-columns: 1fr auto; position: relative; }
+  .artist-name { align-items: baseline; display: flex; gap: .8rem; min-width: 0; }
   li strong { font-family: var(--display); font-size: clamp(3.2rem, 9vw, 9.5rem); font-weight: 400; letter-spacing: -.04em; line-height: .8; text-transform: uppercase; }
   .b2b-tag {
     background: var(--acid);
@@ -111,11 +109,15 @@ const slotPlayers = (slot: Slot) =>
     font-weight: bold;
     letter-spacing: .1em;
     line-height: 1;
-    margin-top: .5rem;
     padding: .32rem .42rem;
     text-transform: uppercase;
   }
-  .slot-time { color: var(--muted); font-size: .82rem; font-style: normal; font-weight: bold; letter-spacing: .1em; padding-top: .5rem; white-space: nowrap; }
+  .slot-time { color: var(--muted); font-size: .82rem; font-style: normal; font-weight: bold; letter-spacing: .1em; white-space: nowrap; }
   .has-player { padding-bottom: 1rem; }
   iframe { border: 0; display: block; margin: 1rem 0 0; width: 100%; }
+  @media (max-width: 720px) {
+    .artist-row { align-items: start; grid-template-columns: 1fr; }
+    .artist-name { align-items: baseline; }
+    .slot-time { padding-top: .4rem; }
+  }
 </style>

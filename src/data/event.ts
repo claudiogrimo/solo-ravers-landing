@@ -42,7 +42,7 @@ export const event = {
     {
       number: '02',
       name: 'Main event',
-      time: '21:30 - late',
+      time: '21:30 - 02:30',
       venue: 'Huis van Iemand Anders',
       address: 'Van Woustraat 2Hs, Amsterdam',
       ticket: 'Separate ticket required',
