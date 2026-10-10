@@ -3,12 +3,8 @@ import { event } from '../data/event';
 
 interface Props {
   ticketUrl: string;
-  paidTicketUrl?: string;
 }
-const {
-  ticketUrl,
-  paidTicketUrl = ticketUrl,
-} = Astro.props;
+const { ticketUrl } = Astro.props;
 
 const { ticketsReleaseAtIso, ticketTiers } = event;
 
@@ -23,7 +19,7 @@ const firstTier = ticketTiers.find((tier) => tier.featured);
   </div>
   <div class="actions">
     <a class="ticket-action acid" data-magnet data-magnet-strength="6" href={ticketUrl} target="_blank" rel="noopener noreferrer"><span>PRE-DRINKS AT TAPMARIN</span><strong>Free pass</strong><b>↗</b></a>
-    <div data-ticket-paid data-release-at={ticketsReleaseAtIso} data-ticket-url={paidTicketUrl} data-ticket-price={firstTier?.price}>
+    <div data-ticket-paid data-release-at={ticketsReleaseAtIso} data-ticket-tiers={JSON.stringify(ticketTiers.map(({ label, price, startsAtIso, url }) => ({ label, price, startsAtIso, url })))}>
       <button class="ticket-action muted" type="button" disabled aria-disabled="true">
         <span>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong>Unlocks Thu 20:30</strong><b>↗</b>
         <small data-countdown>Thu 20:30 (Amsterdam)</small>

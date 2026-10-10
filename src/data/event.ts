@@ -10,16 +10,16 @@ export const event = {
   voteClosesAtIso: '2026-10-08T19:30:00Z',
   // DJ contest winner, revealed at the instant above.
   contestWinner: 'YSKM',
-  // Ticket tiers. Prices are the totals the buyer pays. Order matters: first tier is the
-  // one opening at the release above. Later tiers carry their switch-over instants so the
-  // schedule can be shown publicly:
-  //   - Second release 15 euro: Wednesday 14 October 2026, 21:30 Europe/Rome (CEST, UTC+2),
-  //     i.e. one week before the event.
-  //   - Final release 20 euro: Monday 19 October 2026, 21:30 Europe/Rome, i.e. the last 48h.
+  // Ticket tiers. Prices are the totals the buyer pays. Order matters: `startsAtIso` is the
+  // instant each tier becomes active (null = the opening tier). The paid-ticket CTA reads
+  // the URL and price of the currently active tier, so the link follows the schedule
+  // automatically. Switch-over instants (all 21:30 Europe/Rome, CEST/UTC+2):
+  //   - Second release 15 euro: Wednesday 14 October 2026, 21:30 (one week before the event).
+  //   - Final release 20 euro: Monday 19 October 2026, 21:30 (the last 48h).
   ticketTiers: [
-    { label: 'First release', price: '8 euro', featured: true, startsAtIso: null, windowLabel: 'Until Tue 13 Oct' },
-    { label: 'Second release', price: '15 euro', featured: false, startsAtIso: '2026-10-14T19:30:00Z', windowLabel: 'From Wed 14 Oct, 21:30' },
-    { label: 'Final release', price: '20 euro', featured: false, startsAtIso: '2026-10-19T19:30:00Z', windowLabel: 'From Mon 19 Oct, 21:30' },
+    { label: 'First release', price: '8 euro', featured: true, startsAtIso: null, windowLabel: 'Until Tue 13 Oct', url: 'https://tally.so/r/xXOJZ5' },
+    { label: 'Second release', price: '15 euro', featured: false, startsAtIso: '2026-10-14T19:30:00Z', windowLabel: 'From Wed 14 Oct, 21:30', url: 'https://tally.so/r/rjNAxp' },
+    { label: 'Final release', price: '20 euro', featured: false, startsAtIso: '2026-10-19T19:30:00Z', windowLabel: 'From Mon 19 Oct, 21:30', url: 'https://tally.so/r/XxVWVe' },
   ],
   city: 'Amsterdam / De Pijp',
   promoter: 'Solo Ravers',
@@ -61,8 +61,8 @@ export const event = {
     { name: 'YSKM', slot: '21:30 / 22:45', winner: true, b2b: false, b2bGroup: null },
     { name: 'Clodol', slot: '22:45 / 00:00', winner: false, b2b: true, b2bGroup: 'clodol-oatmilk' },
     { name: 'oatmilk', slot: '22:45 / 00:00', winner: false, b2b: true, b2bGroup: 'clodol-oatmilk' },
-    { name: 'DE//SIRE', slot: '00:00 / 01:15', winner: false, b2b: false, b2bGroup: null },
-    { name: 'SLURPiSS', slot: '01:15 / 02:30', winner: false, b2b: false, b2bGroup: null },
+    { name: 'SLURPiSS', slot: '00:00 / 01:15', winner: false, b2b: false, b2bGroup: null },
+    { name: 'DE//SIRE', slot: '01:15 / 02:30', winner: false, b2b: false, b2bGroup: null },
   ],
   lineupWinnerPlaceholder: 'TBA',
   mapsUrl:

@@ -14,7 +14,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const access = {
   freePassUrl: event.ticketUrl,
-  paidTicketUrl: 'https://tally.so/r/xXOJZ5',
 };
 
 const contestPlayers = [
@@ -50,7 +49,7 @@ const contestPlayers = [
     <Lineup lineup={event.lineup} players={contestPlayers} winner={event.contestWinner} winnerPlaceholder={event.lineupWinnerPlaceholder} announceAtIso={event.voteClosesAtIso} />
     <VoteSection />
     <Venue address={event.parts[1].address} mapsUrl={event.mapsUrl} />
-    <Tickets ticketUrl={access.freePassUrl} paidTicketUrl={access.paidTicketUrl} />
+    <Tickets ticketUrl={access.freePassUrl} />
   </main>
   <Footer promoter={event.promoter} />
   <MotionController />

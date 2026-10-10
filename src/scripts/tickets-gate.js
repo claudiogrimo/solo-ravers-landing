@@ -28,39 +28,93 @@ const scopeMarkup = (scopeAttrs) => {
   };
 };
 
-const unlockPaidTicket = (container, ticketUrl) => {
-  const price = container.dataset.ticketPrice;
+// Build the unlocked CTA markup. Reused both for the first unlock and for every later
+// price switch, so the link/price always reflect the currently active tier.
+const paidTicketMarkup = (container, ticketUrl, price) => {
   const scopeAttrs = collectScopeAttrs(container);
   const s = scopeMarkup(scopeAttrs);
   const priceMarkup = price ? `<em class="ticket-price"${s.inner}>${price}</em>` : '';
-  container.innerHTML = `<a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href="${ticketUrl}" target="_blank" rel="noopener noreferrer"${s.open}><span${s.inner}>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong${s.inner}>Get tickets</strong><b${s.inner}>↗</b>${priceMarkup}</a>`;
+  return `<a class="ticket-action red" data-magnet data-magnet-strength="6" data-ticket-shake href="${ticketUrl}" target="_blank" rel="noopener noreferrer"${s.open}><span${s.inner}>MAIN PARTY AT HUIS VAN IEMAND ANDERS</span><strong${s.inner}>Get tickets</strong><b${s.inner}>↗</b>${priceMarkup}</a>`;
+};
+
+const unlockPaidTicket = (container, ticketUrl, price) => {
+  container.innerHTML = paidTicketMarkup(container, ticketUrl, price);
   window.dispatchEvent(new Event('sr:tickets-unlocked'));
+};
+
+// After the first unlock the CTA is a live <a>. A later tier switch only rewrites its
+// href (and the price badge) in place — no re-mount, no re-animation.
+const updatePaidTicket = (container, ticketUrl, price) => {
+  const link = container.querySelector('a.ticket-action');
+  if (!link) {
+    unlockPaidTicket(container, ticketUrl, price);
+    return;
+  }
+  link.setAttribute('href', ticketUrl);
+  const priceEl = container.querySelector('.ticket-price');
+  if (price) {
+    if (priceEl) {
+      priceEl.textContent = price;
+    } else {
+      const scopeAttrs = collectScopeAttrs(container);
+      const s = scopeMarkup(scopeAttrs);
+      link.insertAdjacentHTML('beforeend', `<em class="ticket-price"${s.inner}>${price}</em>`);
+    }
+  } else if (priceEl) {
+    priceEl.remove();
+  }
+};
+
+// Tiers arrive as an ordered list (first = opening tier, `startsAtIso` null). The active
+// tier is the last one whose `startsAtIso` has passed.
+export const activeTier = (tiers, nowMs) => {
+  let current = tiers[0];
+  for (const tier of tiers) {
+    const at = tier.startsAtIso ? Date.parse(tier.startsAtIso) : NaN;
+    if (Number.isNaN(at) || at <= nowMs) current = tier;
+  }
+  return current;
 };
 
 export const initTicketsGate = (root = document) => {
   root.querySelectorAll('[data-ticket-paid]').forEach((container) => {
     const releaseAt = container.dataset.releaseAt;
-    const ticketUrl = container.dataset.ticketUrl;
     const releaseAtMs = releaseAt ? Date.parse(releaseAt) : NaN;
     const countdown = container.querySelector('[data-countdown]');
 
-    if (!ticketUrl || Number.isNaN(releaseAtMs)) return;
+    let tiers = [];
+    try {
+      tiers = JSON.parse(container.dataset.ticketTiers || '[]');
+    } catch {
+      tiers = [];
+    }
+    if (!tiers.length) return;
+
+    // Guard against a missing opening instant: fall back to the first tier's own URL.
+    if (Number.isNaN(releaseAtMs)) return;
 
     const update = () => {
-      const remainingMs = releaseAtMs - Date.now();
-      if (remainingMs <= 0) {
-        unlockPaidTicket(container, ticketUrl);
-        return true;
+      const nowMs = Date.now();
+
+      // Before the opening release: stay locked, tick the countdown.
+      if (nowMs < releaseAtMs) {
+        if (countdown) countdown.textContent = formatCountdown(releaseAtMs - nowMs);
+        return tiers[0];
       }
 
-      if (countdown) countdown.textContent = formatCountdown(remainingMs);
-      return false;
+      const tier = activeTier(tiers, nowMs);
+      if (nowMs >= releaseAtMs && container.dataset.ticketTierUrl !== tier.url) {
+        container.dataset.ticketTierUrl = tier.url;
+        if (container.querySelector('a.ticket-action')) {
+          updatePaidTicket(container, tier.url, tier.price);
+        } else {
+          unlockPaidTicket(container, tier.url, tier.price);
+        }
+      }
+      return tier;
     };
 
-    if (!update()) {
-      const timer = window.setInterval(() => {
-        if (update()) window.clearInterval(timer);
-      }, 1000);
-    }
+    update();
+    window.setInterval(update, 1000);
   });
 };
